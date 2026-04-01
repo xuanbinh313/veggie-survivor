@@ -1,0 +1,3 @@
+repository "Veggie Survivor/Veggie Survivor@18966603902454@cloud"
+  path "/"
+    smartbranch "/main"
