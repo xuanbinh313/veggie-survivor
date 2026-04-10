@@ -7,7 +7,7 @@ public class PlayerInteraction : MonoBehaviour
     public Transform handSlot; // Kéo object HandSlot vào đây trong Inspector
     private GameObject currentItem; // Vật phẩm đang đứng gần
     private GameObject itemInHand;      // Vật phẩm đang cầm trên tay
-
+    public float interactionDistance = 1.0f;
     void Update()
     {
         if (Keyboard.current == null) return;
@@ -29,6 +29,38 @@ public class PlayerInteraction : MonoBehaviour
             animator.SetTrigger("isPlanting");
             Debug.Log("Planted a seed!");
             // Gọi hàm tạo cây tại đây
+        }
+        // Kiểm tra chuột (hoặc touch) trong hệ thống mới
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            // 1. Tạo Ray từ vị trí chuột trên màn hình
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            RaycastHit hit;
+
+            // 2. Bắn tia Raycast
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Debug để bạn thấy tia Ray có chạm trúng gì không ở cửa sổ Console
+                Debug.Log("Đã chạm vào: " + hit.collider.name);
+
+                // 3. Tìm script LandController trên vật thể bị chạm
+                LandController land = hit.collider.GetComponent<LandController>();
+                
+                if (land != null)
+                {
+                    // Kiểm tra khoảng cách từ Player đến điểm chạm
+                    float dist = Vector3.Distance(transform.position, hit.point);
+                    if (dist <= interactionDistance)
+                    {
+                        land.SetState(); // Hoặc hàm chuyển trạng thái của bạn
+                    }
+                    else
+                    {
+                        Debug.Log("Ở quá xa để tương tác!");
+                    }
+                }
+            }
         }
     }
     void PickUpItem()

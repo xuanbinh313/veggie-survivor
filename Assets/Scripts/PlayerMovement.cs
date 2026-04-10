@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(direction * targetSpeed * Time.deltaTime);
 
             // Cập nhật Animator: 1 = Walk, 2 = Run (Khớp với Blend Tree của bạn)
-            animator.SetFloat("Speed", isRunning ? 2f : 1f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Speed", targetSpeed, 0.1f, Time.deltaTime);
         }
         else
         {
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         // 3. XỬ LÝ TRỌNG LỰC (Giúp nhân vật không bị bay lơ lửng)
         if (controller.isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f; 
+            velocity.y = -2f;
         }
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
