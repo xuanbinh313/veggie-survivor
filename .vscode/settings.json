@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "veggie-survivor.slnx",
+    "dotnet.defaultSolution": "Veggie Survivor.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
