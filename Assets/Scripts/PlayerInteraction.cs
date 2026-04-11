@@ -7,7 +7,8 @@ public class PlayerInteraction : MonoBehaviour
     public Transform handSlot; // Kéo object HandSlot vào đây trong Inspector
     private GameObject currentItem; // Vật phẩm đang đứng gần
     private GameObject itemInHand;      // Vật phẩm đang cầm trên tay
-    public float interactionDistance = 1.0f;
+    public float interactionDistance = 0.5f;
+    private LandController pendingLand; // Mảnh đất đang chờ được cuốc
     void Update()
     {
         if (Keyboard.current == null) return;
@@ -53,7 +54,13 @@ public class PlayerInteraction : MonoBehaviour
                     float dist = Vector3.Distance(transform.position, hit.point);
                     if (dist <= interactionDistance)
                     {
-                        land.SetState(); // Hoặc hàm chuyển trạng thái của bạn
+                        
+                        pendingLand = land; // Lưu lại ô đất
+                        // Xoay nhân vật về phía ô đất
+                        Vector3 direction = land.transform.position - transform.position;
+                        direction.y = 0;
+                        transform.rotation = Quaternion.LookRotation(direction);
+                        animator.SetTrigger("isDigging"); // Kích hoạt animation cuốc
                     }
                     else
                     {
@@ -117,5 +124,14 @@ public class PlayerInteraction : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject == currentItem) currentItem = null;
+    }
+    public void OnDigEffect()
+    {
+        if (pendingLand != null)
+        {
+            pendingLand.SetState(); // Đổi màu đất
+            pendingLand = null; // Reset sau khi xong
+            Debug.Log("Cuốc chạm đất - Đổi Material!");
+        }
     }
 }
