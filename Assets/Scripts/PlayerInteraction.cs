@@ -4,134 +4,125 @@ using UnityEngine.InputSystem;
 public class PlayerInteraction : MonoBehaviour
 {
     public Animator animator;
-    public Transform handSlot; // Kéo object HandSlot vào đây trong Inspector
-    private GameObject currentItem; // Vật phẩm đang đứng gần
-    private GameObject itemInHand;      // Vật phẩm đang cầm trên tay
-    public float interactionDistance = 0.5f;
-    private LandController pendingLand; // Mảnh đất đang chờ được cuốc
+    public Transform handSlot; 
+    public float interactionDistance = 2.0f; // Tăng lên để dễ tương tác
+
+    private ItemObject currentItem;  // Vật phẩm đứng gần
+    private ItemObject itemInHand;   // Vật phẩm đang cầm
+    private LandController pendingLand;
+
     void Update()
     {
         if (Keyboard.current == null) return;
 
-        // 1. Nhấn E để Nhặt (Pickup)
-        if (Keyboard.current.eKey.wasPressedThisFrame && currentItem != null && currentItem.CompareTag("Seed"))
+        // 1. Nhấn E để Nhặt
+        if (Keyboard.current.eKey.wasPressedThisFrame && currentItem != null)
         {
-            animator.SetTrigger("isPicking");
-            Debug.Log("Picked up: " + currentItem.name);
-            // Destroy(currentItem, 0.5f); // Xóa vật phẩm sau khi nhặt
-            // Gọi hàm nhặt sau một khoảng trễ ngắn (để khớp với lúc tay cúi xuống)
-            Invoke("PickUpItem", 0.5f);
+            // Xoay nhân vật về phía vật phẩm
+            LookAtTarget(currentItem.transform.position);
+
+            if (currentItem.CompareTag("Seed"))
+            {
+                animator.SetTrigger("isPicking"); 
+                // Không dùng Invoke, hãy gọi PickUpItem thông qua Animation Event
+            }
+            else if (currentItem.CompareTag("Item"))
+            {
+                animator.SetTrigger("isPicking"); // Giả sử bạn có anim lượm đồ chung
+            }
         }
 
-        // 2. Nhấn F để Trồng (Planting)
-        if (Keyboard.current.fKey.wasPressedThisFrame)
+        // 2. Nhấn F để Trồng
+        if (Keyboard.current.fKey.wasPressedThisFrame && itemInHand != null)
         {
-            // Kiểm tra nếu đang đứng ở ô đất (mã hóa logic địa hình ở đây)
             animator.SetTrigger("isPlanting");
-            Debug.Log("Planted a seed!");
-            // Gọi hàm tạo cây tại đây
+            // Logic trừ item hoặc tạo cây sẽ nằm trong Animation Event của isPlanting
         }
-        // Kiểm tra chuột (hoặc touch) trong hệ thống mới
+
+        // 3. Chuột trái để Cuốc đất
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            // 1. Tạo Ray từ vị trí chuột trên màn hình
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            RaycastHit hit;
+            HandleDigging();
+        }
+    }
 
-            // 2. Bắn tia Raycast
-            if (Physics.Raycast(ray, out hit))
+    void HandleDigging()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            LandController land = hit.collider.GetComponent<LandController>();
+            if (land != null && Vector3.Distance(transform.position, hit.point) <= interactionDistance)
             {
-                // Debug để bạn thấy tia Ray có chạm trúng gì không ở cửa sổ Console
-                Debug.Log("Đã chạm vào: " + hit.collider.name);
-
-                // 3. Tìm script LandController trên vật thể bị chạm
-                LandController land = hit.collider.GetComponent<LandController>();
-                
-                if (land != null)
-                {
-                    // Kiểm tra khoảng cách từ Player đến điểm chạm
-                    float dist = Vector3.Distance(transform.position, hit.point);
-                    if (dist <= interactionDistance)
-                    {
-                        
-                        pendingLand = land; // Lưu lại ô đất
-                        // Xoay nhân vật về phía ô đất
-                        Vector3 direction = land.transform.position - transform.position;
-                        direction.y = 0;
-                        transform.rotation = Quaternion.LookRotation(direction);
-                        animator.SetTrigger("isDigging"); // Kích hoạt animation cuốc
-                    }
-                    else
-                    {
-                        Debug.Log("Ở quá xa để tương tác!");
-                    }
-                }
+                pendingLand = land;
+                LookAtTarget(hit.point);
+                animator.SetTrigger("isDigging");
             }
         }
     }
-    void PickUpItem()
+
+    void LookAtTarget(Vector3 targetPos)
+    {
+        Vector3 direction = targetPos - transform.position;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction);
+    }
+
+    // --- HÀM GỌI TỪ ANIMATION EVENT ---
+
+    public void OnPickUpEffect() // Gán vào Anim nhặt đồ
     {
         if (currentItem == null) return;
 
-        itemInHand = currentItem;
-        // --- THÊM DÒNG NÀY ĐỂ TẮT XOAY ---
-        ItemSpin spinScript = itemInHand.GetComponent<ItemSpin>();
-        if (spinScript != null)
+        // Nếu là Seed thì cầm trên tay, nếu là Item thì cho vào Inventory
+        if (currentItem.CompareTag("Seed"))
         {
-            spinScript.enabled = false;
+            itemInHand = currentItem;
+            
+            // Tắt vật lý và script xoay
+            if (itemInHand.TryGetComponent<Collider>(out Collider col)) col.enabled = false;
+            if (itemInHand.TryGetComponent<Rigidbody>(out Rigidbody rb)) rb.isKinematic = true;
+            
+            itemInHand.transform.SetParent(handSlot);
+            itemInHand.transform.localPosition = Vector3.zero;
+            itemInHand.transform.localRotation = Quaternion.identity;
         }
-        // --------------------------------
-        // Vô hiệu hóa vật lý để không bị lỗi khi di chuyển
-        if (itemInHand.GetComponent<Collider>())
-            itemInHand.GetComponent<Collider>().enabled = false;
-
-        if (itemInHand.GetComponent<Rigidbody>())
-            itemInHand.GetComponent<Rigidbody>().isKinematic = true;
-
-        // Gắn vào tay
-        itemInHand.transform.SetParent(handSlot);
-
-        // Đưa về vị trí 0 (khớp với HandSlot đã chỉnh ở Bước 1)
-        itemInHand.transform.localPosition = Vector3.zero;
-        itemInHand.transform.localRotation = Quaternion.identity;
-
+        else
+        {
+            InventoryManager.Instance.AddItem(currentItem.itemData, 1);
+            Destroy(currentItem.gameObject);
+        }
         currentItem = null;
     }
 
-    void DropOrPlantItem()
+    public void OnDigEffect() // Gán vào Anim cuốc đất
     {
-        // Logic trồng cây: Cho vật phẩm biến mất hoặc đặt xuống đất
-        itemInHand.transform.SetParent(null); // Bỏ vật phẩm ra khỏi tay
-        // Ví dụ: Đặt vị trí xuống chân nhân vật
-        itemInHand.transform.position = transform.position + transform.forward;
-
-        if (itemInHand.GetComponent<Collider>()) itemInHand.GetComponent<Collider>().enabled = true;
-
-        itemInHand = null;
+        if (pendingLand != null)
+        {
+            pendingLand.SetState();
+            pendingLand = null;
+        }
     }
-    // Kiểm tra khi đi vào vùng của vật phẩm
+
+    // --- XỬ LÝ VA CHẠM ---
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Seed"))
+        // Kiểm tra xem object đi vào có script ItemObject không
+        ItemObject io = other.GetComponent<ItemObject>();
+        if (io != null)
         {
-            currentItem = other.gameObject;
-            // Bạn có thể hiện chữ Tiếng Anh ở đây: "Press E to Pick up Seeds"
-            Debug.Log("Standing near: " + currentItem.name);
+            currentItem = io;
+            Debug.Log("Đang đứng gần: " + currentItem.name);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == currentItem) currentItem = null;
-    }
-    public void OnDigEffect()
-    {
-        if (pendingLand != null)
+        if (currentItem != null && other.gameObject == currentItem.gameObject)
         {
-            pendingLand.SetState(); // Đổi màu đất
-            pendingLand = null; // Reset sau khi xong
-            Debug.Log("Cuốc chạm đất - Đổi Material!");
+            currentItem = null;
         }
     }
 }
