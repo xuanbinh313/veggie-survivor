@@ -11,7 +11,7 @@ public class InventoryManager : MonoBehaviour
         public int count;
     }
 
-    public List<InventorySlot> slots = new List<InventorySlot>(6); // 6 ô đồ
+    public List<InventorySlot> slots = new(6); // 6 ô đồ
 
     void Awake() { Instance = this; }
 

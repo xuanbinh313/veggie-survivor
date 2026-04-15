@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Inventory.uss?fileID=7433441132597879392&amp;guid=ddb0ca1ea5f78412ea5e0e1230132c1d&amp;type=3#Inventory"/>
+    <ui:VisualElement name="ScreenRoot" class="screen-root">
+        <ui:VisualElement name="InventoryBar" class="inventory-bar">
+            <ui:VisualElement class="slot">
+                <ui:VisualElement name="Icon" class="item-icon-style" /> 
+                <ui:Label name="CountLabel" class="item-count-style" />
+            </ui:VisualElement>
+            <ui:VisualElement class="slot">
+                <ui:VisualElement name="Icon" class="item-icon-style" /> 
+                <ui:Label name="CountLabel" class="item-count-style" />
+            </ui:VisualElement>
+            <ui:VisualElement class="slot">
+                <ui:VisualElement name="Icon" class="item-icon-style" /> 
+                <ui:Label name="CountLabel" class="item-count-style" />
+            </ui:VisualElement>
+            <ui:VisualElement class="slot">
+                <ui:VisualElement name="Icon" class="item-icon-style" /> 
+                <ui:Label name="CountLabel" class="item-count-style" />
+            </ui:VisualElement>
+            <ui:VisualElement class="slot">
+                <ui:VisualElement name="Icon" class="item-icon-style" /> 
+                <ui:Label name="CountLabel" class="item-count-style" />
+            </ui:VisualElement>
+            <ui:VisualElement class="slot">
+                <ui:VisualElement name="Icon" class="item-icon-style" /> 
+                <ui:Label name="CountLabel" class="item-count-style" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
