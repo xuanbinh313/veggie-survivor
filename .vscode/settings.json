@@ -67,7 +67,7 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "veggie-survivor.slnx",
+    "dotnet.defaultSolution": "Veggie Survivor.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false,
     "dotrush.roslyn.projectOrSolutionFiles": [
         "/Users/binhcodev/Documents/Games/veggie-survivor/Veggie Survivor.slnx",
