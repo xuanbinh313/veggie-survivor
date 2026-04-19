@@ -15,9 +15,9 @@ MonoBehaviour:
   plantName: Bamboo
   timeToGrowTree: 10
   timeToBearFruit: 15
-  seedPrefab: {fileID: 919132149155446097, guid: b4df4cc5132864e0ea4e915d71e527e1, type: 3}
-  treePrefab1: {fileID: 919132149155446097, guid: 79fddee1b80c24b12804bf9d0de84e4a, type: 3}
-  fruitPrefab: {fileID: 919132149155446097, guid: f53b9cf257a7047ea9520a518aa328fa, type: 3}
-  harvestedPrefab: {fileID: 919132149155446097, guid: c6916e8f5399f42b0939776101cc2908, type: 3}
+  seedPrefab: {fileID: 2840027928466381352, guid: 9f26618fae2034b85a067d52d274d486, type: 3}
+  treePrefab1: {fileID: 3901186591556790528, guid: 99ca13b00fad74346b772903f5dc31f5, type: 3}
+  fruitPrefab: {fileID: 8892953128671423972, guid: 9c57d2ea2b7d34e44a8c7b23bca72416, type: 3}
+  harvestedPrefab: {fileID: 5647792288104797454, guid: 4886bb20ee0bf47c88edf38cec7a28ba, type: 3}
   itemToGive: {fileID: 11400000, guid: cd52bd53a1d2a4df481ad18ddd8baad2, type: 2}
   yieldAmount: 1
