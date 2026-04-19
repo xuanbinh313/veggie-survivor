@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   id: 1
   itemName: Hammer
+  description: 
   icon: {fileID: 21300000, guid: d2c59277237f3fb48ab29be6f9f56a79, type: 3}
-  maxStack: 20
+  itemType: 2
+  toolType: 1
+  maxStack: 1
   worldPrefab: {fileID: 919132149155446097, guid: 21c2c88ea2c941d4c834053672096272, type: 3}
+  holdPrefab: {fileID: 919132149155446097, guid: 21c2c88ea2c941d4c834053672096272, type: 3}
+  plantData: {fileID: 0}

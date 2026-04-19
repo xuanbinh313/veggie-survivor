@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Bắt buộc phải có dòng này để dùng hệ thống mới
 
+[RequireComponent(typeof(Renderer))]
 public class LandController : MonoBehaviour
 {
     [Header("Cấu hình các loại đất")]

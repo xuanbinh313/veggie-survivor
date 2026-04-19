@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             // Di chuyển nhân vật
-            controller.Move(direction * targetSpeed * Time.deltaTime);
+            controller.Move(targetSpeed * Time.deltaTime * direction);
 
             // Cập nhật Animator: 1 = Walk, 2 = Run (Khớp với Blend Tree của bạn)
             animator.SetFloat("Speed", targetSpeed, 0.1f, Time.deltaTime);

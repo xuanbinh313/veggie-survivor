@@ -1,17 +1,35 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlantData", menuName = "Farming/Plant Data")]
+[CreateAssetMenu(fileName = "New Plant Data", menuName = "Farming/Plant Data")]
 public class PlantData : ScriptableObject
 {
+    [Header("Core Info")]
     public string plantName;
-    public GameObject seedPrefab;     // Hình ảnh/Model hạt trên đất
-    public GameObject treePrefab1;     // Hình ảnh/Model cây đang lớn
-    public GameObject treePrefab2;     // Hình ảnh/Model cây đang lớn (phiên bản khác, nếu cần)
-    public GameObject fruitPrefab;    // Hình ảnh/Model cây đã có quả
-    public GameObject cropPrefab;     // Hình ảnh/Model cây đã thu hoạch (nếu khác với treePrefab)
-    public GameObject harvestedPrefab; // Hình ảnh/Model cây sau khi thu hoạch (nếu cần)
-    public ItemData itemToGive;           // Vật phẩm nhận được khi thu hoạch (nếu có hệ thống Inventory)
-    public float timeToGrowTree = 10f;  // Thời gian (giây) từ Hạt -> Cây
-    public float timeToBearFruit = 15f; // Thời gian (giây) từ Cây -> Ra quả
 
+    [Header("Growth Timers")]
+    [Tooltip("Thời gian (giây) từ Hạt -> Cây lớn")]
+    public float timeToGrowTree = 10f;  
+    
+    [Tooltip("Thời gian (giây) từ Cây lớn -> Ra quả")]
+    public float timeToBearFruit = 15f; 
+
+    [Header("Visual Progression")]
+    [Tooltip("Model lúc vừa gieo hạt")]
+    public GameObject seedPrefab;     
+    
+    [Tooltip("Model khi đang là cây non")]
+    public GameObject treePrefab1;     
+    
+    [Tooltip("Model khi ra quả (Sẵn sàng thu hoạch)")]
+    public GameObject fruitPrefab;    
+    
+    [Tooltip("Model gốc cây sau khi đã thu hoạch xong")]
+    public GameObject harvestedPrefab; 
+
+    [Header("Harvest Rewards")]
+    [Tooltip("Vật phẩm sẽ rớt ra hoặc tự chui vào túi khi thu hoạch")]
+    public ItemData itemToGive;           
+    
+    [Tooltip("Số lượng vật phẩm rơi ra")]
+    public int yieldAmount = 1;
 }

@@ -1,11 +1,22 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Collider))] // Đảm bảo luôn có Collider để Raycast hoặc Trigger phát hiện
 public class ItemObject : MonoBehaviour
 {
-    public ItemData itemData; // Tham chiếu đến ItemData ScriptableObject
-    void Update()
+    [Header("Data")]
+    [Tooltip("Thông tin vật phẩm này mang theo")]
+    public ItemData itemData; 
+    
+    [Header("Visual Effects")]
+    [SerializeField] private bool rotateOverTime = true;
+    [SerializeField] private float rotationSpeed = 50f;
+
+    private void Update()
     {
-        // Xoay vật phẩm quanh trục Y với tốc độ 50 độ mỗi giây
-        transform.Rotate(Vector3.up * 50 * Time.deltaTime);
+        // Hiệu ứng xoay vòng tạo cảm giác game nhập vai (RPG style)
+        if (rotateOverTime)
+        {
+            transform.Rotate(rotationSpeed * Time.deltaTime * Vector3.up);
+        }
     }
 }
