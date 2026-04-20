@@ -162,6 +162,7 @@ public class PlayerInteraction : MonoBehaviour
         if (type == ItemType.Tool || type == ItemType.Seed)
         {
             EquipItem(itemToPickUp);
+            if (type == ItemType.Tool) InventoryManager.Instance.AddItem(itemToPickUp.itemData, 1); // Giữ lại công cụ trong inventory để sử dụng tiếp
         }
         else
         {

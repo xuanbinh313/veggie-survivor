@@ -19,6 +19,7 @@ public class InventoryManager : MonoBehaviour
     {
         // 1. Tìm xem item này đã có trong túi chưa (để cộng dồn stack)
         foreach (var slot in slots) {
+            Debug.Log($"Checking slot: {slot.item?.itemName} with count {slot.count}");
             if (slot.item == data && slot.count < data.maxStack) {
                 slot.count += amount;
                 UpdateUI();
@@ -28,7 +29,10 @@ public class InventoryManager : MonoBehaviour
 
         // 2. Nếu chưa có, tìm ô trống (item == null)
         for (int i = 0; i < slots.Count; i++) {
+            Debug.Log($"Looking for empty slot: {i}, current item: {slots[i].item}");
+
             if (slots[i].item == null) {
+                Debug.Log($"Adding item {data.itemName} to slot {i}");
                 slots[i].item = data;
                 slots[i].count = amount;
                 UpdateUI();
@@ -40,6 +44,7 @@ public class InventoryManager : MonoBehaviour
 
     void UpdateUI() {
         // Gọi đến Script hiển thị UI (Bước 4)
+        Debug.Log("Updating inventory UI.");
         InventoryUI.Instance.RefreshRender();
     }
 }

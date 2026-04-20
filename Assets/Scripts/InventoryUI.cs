@@ -28,6 +28,7 @@ public class InventoryUI : MonoBehaviour
     public void RefreshRender()
     {
         var dataSlots = InventoryManager.Instance.slots;
+        Debug.Log("Refreshing inventory UI.");
 
         for (int i = 0; i < slotsUI.Count; i++)
         {
