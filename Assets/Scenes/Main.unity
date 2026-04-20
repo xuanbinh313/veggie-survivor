@@ -3946,8 +3946,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
   slots:
-  - item: {fileID: 11400000, guid: f52b4d55b8383234ebd3ed789991467e, type: 2}
-    count: 1
+  - item: {fileID: 0}
+    count: 0
+  - item: {fileID: 0}
+    count: 0
+  - item: {fileID: 0}
+    count: 0
+  - item: {fileID: 0}
+    count: 0
+  - item: {fileID: 0}
+    count: 0
+  - item: {fileID: 0}
+    count: 0
 --- !u!4 &1904727525
 Transform:
   m_ObjectHideFlags: 0
